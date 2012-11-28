@@ -3,20 +3,27 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 import javax.swing.Timer;
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Concentration extends JPanel implements ActionListener {
 	
 	int[] ordered = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54};
 	int[] shuffled = shuffler(ordered);
 	
-	JButton replayBtn, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33, b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49, b50, b51, b52, b53, b54;
-	JButton[] button = {b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33, b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49, b50, b51, b52, b53, b54};
-	JButton[][] compare = {{b1,b2,b3,b4}, {b5,b6,b7,b8}, {b9,b10,b11,b12}, {b13,b14,b15,b16}, {b17,b18,b19,b20}, {b21,b22,b23,b24}, {b25,b26,b27,b28}, {b29,b30,b31,b32}, {b33,b34,b35,b36}, {b37,b38,b39,b40}, {b41,b42,b43,b44}, {b45,b46,b47,b48}, {b49,b50,b51,b52}, {b53,b54, null, null}};
+	JButton replayBtn;
+	static JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33, b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49, b50, b51, b52, b53, b54, ba;
+	JButton[] button = {b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33, b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49, b50, b51, b52, b53, b54, ba};
+	static String[][] compare = {{"b1","b2","b3","b4"}, {"b5","b6","b7","b8"}, {"b9","b10","b11","b12"}, {"b13","b14","b15","b16"}, {"b17","b18","b19","b20"}, {"b21","b22","b23","b24"}, {"b25","b26","b27","b28"}, {"b29","b30","b31","b32"}, {"b33","b34","b35","b36"}, {"b37","b38","b39","b40"}, {"b41","b42","b43","b44"}, {"b45","b46","b47","b48"}, {"b49","b50","b51","b52"}, {"b53","b54", "b55", "b56"}};
+	String[] Sbutton = {"b1","b2","b3","b4","b5","b6","b7","b8","b9","b10","b11","b12","b13","b14","b15","b16","b17","b18","b19","b20","b21","b22","b23","b24","b25","b26","b27","b28","b29","b30","b31","b32","b33","b34","b35","b36","b37","b38","b39","b40","b41","b42","b43","b44","b45","b46","b47","b48","b49","b50","b51","b52","b53","b54", null, null};
 	ImageIcon card, card2, back, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, card17, card18, card19, card20, card21, card22, card23, card24, card25, card26, card27, card28, card29, card30, card31, card32, card33, card34, card35, card36, card37, card38, card39, card40, card41, card42, card43, card44, card45, card46, card47, card48, card49, card50, card51, card52, card53, card54, card55, card56 ;
 	ImageIcon[] cards = {card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, card17, card18, card19, card20, card21, card22, card23, card24, card25, card26, card27, card28, card29, card30, card31, card32, card33, card34, card35, card36, card37, card38, card39, card40, card41, card42, card43, card44, card45, card46, card47, card48, card49, card50, card51, card52, card53, card54, card55, card56};
 	
-	private int visibleButtons, counter;
+	private int counter, score1, score2, pairCount;
+	final JLabel player1 = new JLabel("Player 1: 0");
+	final JLabel player2 = new JLabel("Player 2: 0");
+	final JLabel move = new JLabel("Turn: Player 1");
+	final JLabel log = new JLabel("");
 	
 	public Concentration() {
 		
@@ -26,12 +33,7 @@ public class Concentration extends JPanel implements ActionListener {
 	}
 	
 	public void init () {
-		/*
-		final TextField tries = new TextField(15);
 		
-		JLabel label = new JLabel();
-		label.setToolTipText("Attempts");
-		*/
 		int w = 60, h = 80;
 		
 		for (int j = 0; j < 54; j++) {
@@ -47,14 +49,19 @@ public class Concentration extends JPanel implements ActionListener {
 			cards[j].setImage(i2);
 			
 			button[j] = new JButton (card);
+			add(button[j]);
 			button[j].addActionListener(this);
 			
-			add(button[j]);
 		}
 		
 		replayBtn = new JButton("Restart");
 		replayBtn.addActionListener(this);
+		add(log);
+		add(player1);
+		add(player2);
+		add(move);
 		add(replayBtn);
+		
 	}
 	
 	public static int[] shuffler (int[]a) { //method to shuffle a deck of cards
@@ -68,7 +75,7 @@ public class Concentration extends JPanel implements ActionListener {
 			}
 		} return a;
 	}
-
+	
 	public static void swapper(int[] a, int b, int c){ //swapper method used in the shuffler method to shuffle a deck of cards
 		int x = a[b];
 		int y = a[c];
@@ -84,9 +91,12 @@ public class Concentration extends JPanel implements ActionListener {
 		return true;
 	}
 	
-	@Override
+
+	ArrayList<Integer> pairs = new ArrayList<Integer>();
+	ArrayList<JButton> pairs2 = new ArrayList<JButton>();
+ 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Timer timer = new Timer(2000, new ActionListener() {
+		Timer timer = new Timer(1500, new ActionListener() {
 			@Override
 			public void actionPerformed (ActionEvent e) {
 				for (int i = 0; i < button.length; i++) {
@@ -104,35 +114,73 @@ public class Concentration extends JPanel implements ActionListener {
 		if (!gameChecker()) {
 			for (int i = 0; i < button.length; i++) {
 				if (e.getSource() == button[i]) {
-					timer.start();
+					
 					a = i;
 					button[a].setIcon(cards[a]);
 					counter++;
-					//System.out.println(counter);
-					for (int j = 0; j < button.length; j++) {
-						if (e.getSource() == button[j] && i!=j) {
-							button[i].setEnabled(false);
-							button[j].setEnabled(false);
+					pairs.add(i);
+					pairs2.add(button[a]);
+					
+					if (b1 == button[i])
+						System.out.println(true);
+					
+					if (counter == 2) {
+						timer.start();
+						timer.setRepeats(false);
+						if (test(pairCount) == true)
+							move.setText("Turn: Player 1");
+						else 
+							move.setText("Turn: Player 2");
+						
+						pairCount++;
+						
+						if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
+							log.setText("You got a match!");
+							button[pairs.get(0)].removeActionListener(this);
+							button[pairs.get(1)].removeActionListener(this);
+						
+							if (test(pairCount) == false) {
+								score1++;
+								player1.setText("Player 1 score: " + score1);
+							} else if (test(pairCount) == true) {
+								score2++;
+								player2.setText("Player 2 score: " + score2);
+							}
+						} else {
+							log.setText("Wrong! Try again!");
+							//pairs2.get(0).setIcon(card);
+							//pairs2.get(1).setIcon(card);
 						}
+						counter = 0;
+						pairs.clear();
+						pairs2.clear();
 					}
 				}
 			}
-			
-			if (counter == 2) 
-				counter = 0;			
-			
 		}
-	}	
-	
-	public boolean comparison (JButton a, JButton b) {
-		
-		for (int i = 0; i <= 13; i++) {
-			for (int j = 0; j <= 4; j++) {
-				if (a == compare[i][j] && b == compare[i][j])
-					return true;
-				else
-					return false;
+	}
+ 	
+ 	public static boolean test(int a){
+		if (a % 2 == 0){
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean check(String x, String y){
+		int a = 0, b = 0;
+		for (int i = 0; i <=13; i++){
+			for (int j = 0; j<=3; j++){
+				if (compare[i][j].equals(x)){
+					a = i;
+				}
+				if (compare[i][j].equals(y)){
+					b = i;
+				}
 			}
+		}
+		if (x == y){
+			return true;
 		}
 		return false;
 	}
