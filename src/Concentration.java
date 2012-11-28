@@ -13,6 +13,8 @@ public class Concentration extends JPanel implements ActionListener {
 	ImageIcon card, card2;
 	Concentration other;
 	
+	private int visibleButtons, counter;
+	
 	public Concentration() {
 		
 		super();
@@ -24,7 +26,7 @@ public class Concentration extends JPanel implements ActionListener {
 		
 		int w = 60, h = 80;
 		
-		for (int j = 0; j <= 53; j++) {
+		for (int j = 0; j < 54; j++) {
 			card = new ImageIcon (getClass().getResource("b2fv.png"));
 			Image i = card.getImage();
 			Image i2 = i.getScaledInstance(w, h, Image.SCALE_DEFAULT);
@@ -84,22 +86,28 @@ public class Concentration extends JPanel implements ActionListener {
 		a[b] = y;
 		a[c] = x;
 	}
-
+	private boolean gameChecker() {
+		for (int i = 0; i < button.length; i++) {
+			if (button[i].isEnabled() == true)
+				return false;
+		}
+		return true;
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int counter = 0;
+
 		if (e.getSource() == replayBtn) {
-			//System.out.println("Hello World!");
-			new Concentration();
-		}
+			init();
+		} 
 		
 		for (int i = 0; i < button.length; i++) {
-			if (button[i] == e.getSource()) {
-				button[i].setIcon(card2);
+			if (e.getSource() == button[i]) {
+				button[i].setIcon(card2); //always displaying joker
 				counter++;
+				visibleButtons++;
 			} else
 				button[i].setIcon(card);
-				
+			
 			//other.flip();
 		}
 	}
