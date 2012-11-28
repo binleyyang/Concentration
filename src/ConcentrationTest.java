@@ -7,11 +7,11 @@ public class ConcentrationTest {
 	JFrame frame = new JFrame ();
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	frame.getContentPane().add(new Concentration(5));
-
+	frame.getContentPane().add(new Concentration());
+	
 	frame.pack();
 	frame.setVisible(true);
-	frame.setSize(400, 400);
+	frame.setSize(800, 650);
 	
 	}
 }
