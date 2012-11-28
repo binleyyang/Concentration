@@ -2,7 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
-import java.util.Timer;
+import javax.swing.Timer;
+import java.util.Collection;
 
 public class Concentration extends JPanel implements ActionListener {
 	
@@ -11,11 +12,10 @@ public class Concentration extends JPanel implements ActionListener {
 	
 	JButton replayBtn, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33, b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49, b50, b51, b52, b53, b54;
 	JButton[] button = {b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24, b25, b26, b27, b28, b29, b30, b31, b32, b33, b34, b35, b36, b37, b38, b39, b40, b41, b42, b43, b44, b45, b46, b47, b48, b49, b50, b51, b52, b53, b54};
+	JButton[][] compare = {{b1,b2,b3,b4}, {b5,b6,b7,b8}, {b9,b10,b11,b12}, {b13,b14,b15,b16}, {b17,b18,b19,b20}, {b21,b22,b23,b24}, {b25,b26,b27,b28}, {b29,b30,b31,b32}, {b33,b34,b35,b36}, {b37,b38,b39,b40}, {b41,b42,b43,b44}, {b45,b46,b47,b48}, {b49,b50,b51,b52}, {b53,b54, null, null}};
 	ImageIcon card, card2, back, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, card17, card18, card19, card20, card21, card22, card23, card24, card25, card26, card27, card28, card29, card30, card31, card32, card33, card34, card35, card36, card37, card38, card39, card40, card41, card42, card43, card44, card45, card46, card47, card48, card49, card50, card51, card52, card53, card54, card55, card56 ;
 	ImageIcon[] cards = {card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, card17, card18, card19, card20, card21, card22, card23, card24, card25, card26, card27, card28, card29, card30, card31, card32, card33, card34, card35, card36, card37, card38, card39, card40, card41, card42, card43, card44, card45, card46, card47, card48, card49, card50, card51, card52, card53, card54, card55, card56};
-	//Concentration other;
 	
-	private int[] btnID = new int[2];
 	private int visibleButtons, counter;
 	
 	public Concentration() {
@@ -56,26 +56,6 @@ public class Concentration extends JPanel implements ActionListener {
 		replayBtn.addActionListener(this);
 		add(replayBtn);
 	}
-	/*
-	private class ButtonHandler implements ActionListener {
-		public void actionPerformed (ActionEvent ae) {
-			for (int i = 0; i < 54; i++) {
-				if (button[i].getIcon() == card2) {
-					button[i].setIcon(card);
-				} else
-					button[i].setIcon(card2);
-				other.flip();
-			}
-		}
-	}
-	*/
-	public void flip(JButton b) {
-		
-			if (b.getIcon() == card2)
-				b.setIcon(card);
-			else
-				b.setIcon(card2);
-	}
 	
 	public static int[] shuffler (int[]a) { //method to shuffle a deck of cards
 		
@@ -106,28 +86,62 @@ public class Concentration extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Timer timer = new Timer();
+		Timer timer = new Timer(2000, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				repaint();
+			}
+		});
 		
 		int a = 0;
 		if (e.getSource() == replayBtn) {
 			init();
 		} 
 		
-		for (int i = 0; i < button.length; i++) {
-		
-			if (e.getSource() == button[i]) {
-				a = i;
-				button[a].setIcon(cards[i]);
-				counter++;
-				visibleButtons++;
+		if (!gameChecker()) {
+			for (int i = 0; i < button.length; i++) {
+				if (e.getSource() == button[i]) {
+					a = i;
+					button[a].setIcon(cards[a]);
+					counter++;
+					System.out.println(counter);
+					//if (comparison(b1, b33) == true)
+					
+					for (int j = 0; j < button.length; j++) {
+						if (e.getSource() == button[j] && i!=j) {
+							button[i].setEnabled(false);
+							button[j].setEnabled(false);
+						}
+					}
 				}
+				//else
+				//	button[i].setIcon(cards[i]);
+			}
 			
-			//else
-			//	button[i].setIcon(cards[i]);
+			if (counter == 2) {
 				
-				//other.flip();
+				for (int i = 0; i < button.length; i++) {
+					timer.start();
+					button[i].setIcon(card);
+				}
+				counter = 0;
 			
+			}
+		}	
+	}	
+	
+	public boolean comparison (JButton a, JButton b) {
+		
+		for (int i = 0; i <= 13; i++) {
+			for (int j = 0; j <= 4; j++) {
+				if (a == compare[i][j] && b == compare[i][j])
+					return true;
+				else
+					return false;
+			}
 		}
+		return false;
 	}
 }
 
+	
+	
