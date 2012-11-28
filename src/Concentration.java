@@ -87,12 +87,16 @@ public class Concentration extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Timer timer = new Timer(2000, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				repaint();
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				for (int i = 0; i < button.length; i++) {
+					button[i].setIcon(card);
+				}
 			}
 		});
 		
 		int a = 0;
+		
 		if (e.getSource() == replayBtn) {
 			init();
 		} 
@@ -100,12 +104,11 @@ public class Concentration extends JPanel implements ActionListener {
 		if (!gameChecker()) {
 			for (int i = 0; i < button.length; i++) {
 				if (e.getSource() == button[i]) {
+					timer.start();
 					a = i;
 					button[a].setIcon(cards[a]);
 					counter++;
-					System.out.println(counter);
-					//if (comparison(b1, b33) == true)
-					
+					//System.out.println(counter);
 					for (int j = 0; j < button.length; j++) {
 						if (e.getSource() == button[j] && i!=j) {
 							button[i].setEnabled(false);
@@ -113,20 +116,12 @@ public class Concentration extends JPanel implements ActionListener {
 						}
 					}
 				}
-				//else
-				//	button[i].setIcon(cards[i]);
 			}
 			
-			if (counter == 2) {
-				
-				for (int i = 0; i < button.length; i++) {
-					timer.start();
-					button[i].setIcon(card);
-				}
-				counter = 0;
+			if (counter == 2) 
+				counter = 0;			
 			
-			}
-		}	
+		}
 	}	
 	
 	public boolean comparison (JButton a, JButton b) {
