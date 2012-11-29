@@ -1,3 +1,7 @@
+//Binley Yang
+//CSC 171
+//Project 3: Concentration
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
