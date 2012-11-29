@@ -5,8 +5,6 @@ import java.util.Random;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import java.util.Arrays;
 import java.util.ArrayList;
 
 public class Concentration extends JPanel implements ActionListener {
@@ -115,15 +113,11 @@ public class Concentration extends JPanel implements ActionListener {
 			else {
 				game = 0;
 				replay();
+				Click(); //have computer click buttons randomly automatical
 				}
 			}
-			public void itemStateChanged(ItemEvent e) {
-			System.out.println("ItemEvent received: " 
-				       + e.getItem()
-				       + " is now "
-				       + ((e.getStateChange() == ItemEvent.SELECTED)?
-					   "selected.":"unselected"));
-			}
+			public void itemStateChanged(ItemEvent e) {}
+			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				// TODO Auto-generated method stub
@@ -217,8 +211,6 @@ public class Concentration extends JPanel implements ActionListener {
 						counter = 0;
 						pairs.clear();
 						pairs2.clear();
-						System.out.println(counter);
-						
 					}
 				}
 			}
@@ -226,11 +218,104 @@ public class Concentration extends JPanel implements ActionListener {
 		
 		if (game == 1) { //one player vs. AI
 			
+			Random random = new Random();
+			
 			int a = 0;
 			
 			if (e.getSource() == replayBtn)
 				replay();
 		
+			for (int i = 0; i < button.length; i++) {
+				
+				if (e.getSource() == button[i]) {	
+					a = i;
+					button[a].setIcon(cards[a]);
+					button[a].removeActionListener(this);
+					counter++;
+					numberOfMoves.setText("Attempts:" + pairCount);
+					pairs.add(i);
+					pairs2.add(button[a]);
+					
+					if (b1 == button[i])
+						System.out.println(true);
+					
+					if (counter == 2) {
+						pairs2.get(0).addActionListener(this);
+						pairs2.get(1).addActionListener(this);
+						timer.start();
+						timer.setRepeats(false);
+						if (test(pairCount) == false)
+							move.setText("Turn: Player 1");
+						else {
+							move.setText("Turn: Computer");
+							ArrayList<Integer> randomNumbers = new ArrayList<Integer>();
+							randomNumbers.add(random.nextInt(55)-1);
+							randomNumbers.add(random.nextInt(55)-1);
+								
+							button[randomNumbers.get(0)].doClick();
+							button[randomNumbers.get(1)].doClick();
+							
+							pairs.clear();
+							pairs.add(randomNumbers.get(0));
+							pairs.add(randomNumbers.get(1));
+							
+							pairs2.get(0).addActionListener(this); 
+							pairs2.get(1).addActionListener(this);
+							
+							timer.start();
+							
+							if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
+								log.setText("You got a match!");
+								button[pairs.get(0)].setEnabled(false);
+								button[pairs.get(1)].setEnabled(false);
+							
+								if (test(pairCount) == false) {
+									score1++;
+									player1.setText("Player 1: " + score1);
+								} else if (test(pairCount) == true) {
+									score2++;
+									player2.setText("Computer: " + score2);
+								}
+							} else 
+								log.setText("Wrong! Try again!");
+					
+							counter = 0;
+							pairs.clear();
+							pairs2.clear();
+							pairCount++;
+						}
+						
+						pairCount++;
+						
+						if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
+							log.setText("You got a match!");
+							button[pairs.get(0)].setEnabled(false);
+							button[pairs.get(1)].setEnabled(false);
+						
+							if (test(pairCount) == false) {
+								score1++;
+								player1.setText("Player 1: " + score1);
+							} else if (test(pairCount) == true) {
+								score2++;
+								player2.setText("Computer: " + score2);
+							}
+						} else 
+							log.setText("Wrong! Try again!");
+				
+						counter = 0;
+						pairs.clear();
+						pairs2.clear();
+					}
+				}
+			}
+		}
+		
+		if (game == 0) { //AI solves the game
+			
+			int a = 0;
+			if (e.getSource() == replayBtn) {
+				replay();
+			}
 			for (int i = 0; i < button.length; i++) {
 				
 				if (e.getSource() == button[i]) {	
@@ -275,13 +360,23 @@ public class Concentration extends JPanel implements ActionListener {
 						counter = 0;
 						pairs.clear();
 						pairs2.clear();
-						System.out.println(counter);
-						
 					}
 				}
 			}
 		}
 	}
+ 	
+	public void Click() {
+ 	
+	Random random = new Random();
+ 		
+	ArrayList<Integer> randomNumbers = new ArrayList<Integer>();
+	randomNumbers.add(random.nextInt(55)-1);
+	randomNumbers.add(random.nextInt(55)-1);
+		
+	button[randomNumbers.get(0)].doClick();
+	button[randomNumbers.get(1)].doClick();
+ }
  
  	public void replay() { //method to restart the game
 		player1.setText("Player 1: 0");
@@ -300,7 +395,7 @@ public class Concentration extends JPanel implements ActionListener {
 		}
 	}
  	
- 	public static boolean test(int a) { //method to test if two cards have been selected or not
+ 	public static boolean test(int a) { //method to test if even or odd
 		if (a % 2 == 0) {
 			return true;
 		}
@@ -321,7 +416,7 @@ public class Concentration extends JPanel implements ActionListener {
 				}
 			}
 		}
-		if (a == b){
+		if (a == b) { 
 			return true;
 		}
 		return false;
