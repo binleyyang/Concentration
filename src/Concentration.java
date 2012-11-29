@@ -117,7 +117,7 @@ public class Concentration extends JPanel implements ActionListener {
 			else {
 				game = 0;
 				replay();
-				Click(); //have computer click buttons randomly automatical
+				//Click(); //have computer click buttons randomly automatical
 				}
 			}
 			public void itemStateChanged(ItemEvent e) {}
@@ -196,25 +196,7 @@ public class Concentration extends JPanel implements ActionListener {
 							move.setText("Turn: Player 2");
 						
 						pairCount++;
-						
-						if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
-							log.setText("You got a match!");
-							button[pairs.get(0)].setEnabled(false);
-							button[pairs.get(1)].setEnabled(false);
-						
-							if (test(pairCount) == false) {
-								score1++;
-								player1.setText("Player 1: " + score1);
-							} else if (test(pairCount) == true) {
-								score2++;
-								player2.setText("Player 2: " + score2);
-							}
-						} else 
-							log.setText("Wrong! Try again!");
-				
-						counter = 0;
-						pairs.clear();
-						pairs2.clear();
+						comparison();
 					}
 				}
 			}
@@ -252,70 +234,18 @@ public class Concentration extends JPanel implements ActionListener {
 							move.setText("Turn: Player 1");
 						else {
 							move.setText("Turn: Computer");
-							ArrayList<Integer> randomNumbers = new ArrayList<Integer>();
-							randomNumbers.add(random.nextInt(55)-1);
-							randomNumbers.add(random.nextInt(55)-1);
-								
-							button[randomNumbers.get(0)].doClick();
-							button[randomNumbers.get(1)].doClick();
-							
-							pairs.clear();
-							pairs.add(randomNumbers.get(0));
-							pairs.add(randomNumbers.get(1));
-							
-							pairs2.get(0).addActionListener(this); 
-							pairs2.get(1).addActionListener(this);
-							
-							timer.start();
-							
-							if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
-								log.setText("You got a match!");
-								button[pairs.get(0)].setEnabled(false);
-								button[pairs.get(1)].setEnabled(false);
-							
-								if (test(pairCount) == false) {
-									score1++;
-									player1.setText("Player 1: " + score1);
-								} else if (test(pairCount) == true) {
-									score2++;
-									player2.setText("Computer: " + score2);
-								}
-							} else 
-								log.setText("Wrong! Try again!");
-					
-							counter = 0;
-							pairs.clear();
-							pairs2.clear();
-							pairCount++;
+							Click();
 						}
 						
 						pairCount++;
 						
-						if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
-							log.setText("You got a match!");
-							button[pairs.get(0)].setEnabled(false);
-							button[pairs.get(1)].setEnabled(false);
-						
-							if (test(pairCount) == false) {
-								score1++;
-								player1.setText("Player 1: " + score1);
-							} else if (test(pairCount) == true) {
-								score2++;
-								player2.setText("Computer: " + score2);
-							}
-						} else 
-							log.setText("Wrong! Try again!");
-				
-						counter = 0;
-						pairs.clear();
-						pairs2.clear();
+						comparison();
 					}
 				}
 			}
 		}
 		
 		if (game == 0) { //AI solves the game
-			
 			int a = 0;
 			if (e.getSource() == replayBtn) {
 				replay();
@@ -345,25 +275,7 @@ public class Concentration extends JPanel implements ActionListener {
 							move.setText("Turn: Player 2");
 						
 						pairCount++;
-						
-						if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
-							log.setText("You got a match!");
-							button[pairs.get(0)].setEnabled(false);
-							button[pairs.get(1)].setEnabled(false);
-						
-							if (test(pairCount) == false) {
-								score1++;
-								player1.setText("Player 1: " + score1);
-							} else if (test(pairCount) == true) {
-								score2++;
-								player2.setText("Player 2: " + score2);
-							}
-						} else 
-							log.setText("Wrong! Try again!");
-				
-						counter = 0;
-						pairs.clear();
-						pairs2.clear();
+						comparison();
 					}
 				}
 			}
@@ -372,15 +284,48 @@ public class Concentration extends JPanel implements ActionListener {
  	
 	public void Click() {
  	
-	Random random = new Random();
- 		
-	ArrayList<Integer> randomNumbers = new ArrayList<Integer>();
-	randomNumbers.add(random.nextInt(55)-1);
-	randomNumbers.add(random.nextInt(55)-1);
+		Random random = new Random();
+	 		
+		ArrayList<Integer> randomNumbers = new ArrayList<Integer>();
+		randomNumbers.add(random.nextInt(55)-1);
+		randomNumbers.add(random.nextInt(55)-1);
+			
+		button[randomNumbers.get(0)].doClick();
+		button[randomNumbers.get(1)].doClick();
 		
-	button[randomNumbers.get(0)].doClick();
-	button[randomNumbers.get(1)].doClick();
+		pairs.clear();
+		pairs.add(randomNumbers.get(0));
+		pairs.add(randomNumbers.get(1));
+		
+		pairs2.get(0).addActionListener(this); 
+		pairs2.get(1).addActionListener(this);
+		
+		//timer.start();
+		
+		comparison();
+		pairCount++;
  }
+	
+	public void comparison() {
+		if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
+			log.setText("You got a match!");
+			button[pairs.get(0)].setEnabled(false);
+			button[pairs.get(1)].setEnabled(false);
+		
+			if (test(pairCount) == false) {
+				score1++;
+				player1.setText("Player 1: " + score1);
+			} else if (test(pairCount) == true) {
+				score2++;
+				player2.setText("Computer: " + score2);
+			}
+		} else 
+			log.setText("Wrong! Try again!");
+	
+		counter = 0;
+		pairs.clear();
+		pairs2.clear();
+	}
  
  	public void replay() { //method to restart the game
 		player1.setText("Player 1: 0");
@@ -400,9 +345,8 @@ public class Concentration extends JPanel implements ActionListener {
 	}
  	
  	public static boolean test(int a) { //method to test if even or odd
-		if (a % 2 == 0) {
+		if (a % 2 == 0) 
 			return true;
-		}
 		return false;
 	}
 
@@ -412,17 +356,14 @@ public class Concentration extends JPanel implements ActionListener {
 			return false;
 		for (int i = 0; i <=13; i++) {
 			for (int j = 0; j<=3; j++) {
-				if (compare[i][j].equals(x)) {
+				if (compare[i][j].equals(x))
 					a = i;
-				}
-				if (compare[i][j].equals(y)) {
+				if (compare[i][j].equals(y))
 					b = i;
-				}
 			}
 		}
-		if (a == b) { 
+		if (a == b) 
 			return true;
-		}
 		return false;
 	}
 }
