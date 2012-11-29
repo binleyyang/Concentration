@@ -3,10 +3,17 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.util.Arrays;
 import java.util.ArrayList;
 
 public class Concentration extends JPanel implements ActionListener {
+	
+	static String twoPeople = new String("Two Players");
+	static String onePerson = new String("One Player");
+	static String noPeople = new String("Computer");
 	
 	int[] ordered = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54};
 	int[] shuffled = shuffler(ordered);
@@ -29,6 +36,8 @@ public class Concentration extends JPanel implements ActionListener {
 	JRadioButton onePlayer = new JRadioButton("One Player");
 	JRadioButton twoPlayer = new JRadioButton("Two Players");
 	JRadioButton noPlayer = new JRadioButton("Computer");
+	
+	ButtonGroup group;
 	
 	public Concentration() {
 		
@@ -58,11 +67,28 @@ public class Concentration extends JPanel implements ActionListener {
 			button[j].addActionListener(this);
 			
 		}
-		onePlayer.addActionListener(this);
-		twoPlayer.addActionListener(this);
-		noPlayer.addActionListener(this);
-		
 		replayBtn.addActionListener(this);
+		
+		twoPlayer.setSelected(true);
+		twoPlayer.setActionCommand(twoPeople);
+		onePlayer.setActionCommand(onePerson);
+		noPlayer.setActionCommand(noPeople);
+		
+		group = new ButtonGroup();
+		group.add(onePlayer);
+		group.add(twoPlayer);
+		group.add(noPlayer);
+		
+		RadioListener listener = new RadioListener();
+		twoPlayer.addActionListener(listener);
+		twoPlayer.addItemListener(listener);
+		twoPlayer.addChangeListener(listener);
+		onePlayer.addActionListener(listener);
+		onePlayer.addItemListener(listener);
+		onePlayer.addChangeListener(listener);
+		noPlayer.addActionListener(listener);
+		noPlayer.addItemListener(listener);
+		noPlayer.addChangeListener(listener);
 		
 		add(log);
 		add(player1);
@@ -73,6 +99,33 @@ public class Concentration extends JPanel implements ActionListener {
 		add(twoPlayer);
 		add(noPlayer);
 		add(numberOfMoves);
+	}
+	
+	class RadioListener implements ActionListener, ChangeListener, ItemListener {  
+		public void actionPerformed(ActionEvent e) {
+
+			System.out.print("ActionEvent received: ");
+			if (e.getActionCommand() == twoPeople) {
+			System.out.println(twoPeople + " pressed.");
+			} else if (e.getActionCommand() == onePerson) {
+			System.out.println(onePerson + " pressed.");
+			}
+			else {
+				System.out.println(noPeople + " pressed.");
+			}
+			}
+	
+			public void itemStateChanged(ItemEvent e) {
+			System.out.println("ItemEvent received: " 
+				       + e.getItem()
+				       + " is now "
+				       + ((e.getStateChange() == ItemEvent.SELECTED)?
+					   "selected.":"unselected"));
+			}
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				// TODO Auto-generated method stub
+			}
 	}
 	
 	public static int[] shuffler (int[]a) { //method to shuffle a deck of cards
@@ -94,6 +147,7 @@ public class Concentration extends JPanel implements ActionListener {
 		a[c] = x;
 	}
 
+	
 	int counter, score1, score2, pairCount;
 	ArrayList<Integer> pairs = new ArrayList<Integer>();
 	ArrayList<JButton> pairs2 = new ArrayList<JButton>();
@@ -110,22 +164,12 @@ public class Concentration extends JPanel implements ActionListener {
 			}
 		});
 		
-		int a, attemptCount = 0;
+		int a = 0;
 		
 		if (e.getSource() == replayBtn) {
-			player1.setText("Player 1: 0");
-			player2.setText("Player 2: 0");
-			move.setText("Turn: Player 1");
-			log.setText("");
-			numberOfMoves.setText("Attempts: 0");
-			
-			for (int i = 0; i < button.length; i++) {
-				button[i].setIcon(card);
-				button[i].setEnabled(true);
-			}
+			replay();
 		} 
-		//if ((JRadioButton)e.getSource() == twoPlayer) {
-			//System.out.println("Button Pressed");
+		
 			for (int i = 0; i < button.length; i++) {
 				if (e.getSource() == button[i]) {	
 					a = i;
@@ -175,7 +219,23 @@ public class Concentration extends JPanel implements ActionListener {
 				}
 			}
 		}
- 	//}
+ 
+ 	public void replay() {
+		player1.setText("Player 1: 0");
+		player2.setText("Player 2: 0");
+		move.setText("Turn: Player 1");
+		log.setText("");
+		numberOfMoves.setText("Attempts: 0");
+		pairCount = 0;
+		counter = 0;
+		score1 = 0;
+		score2 = 0;
+		
+		for (int i = 0; i < button.length; i++) {
+			button[i].setIcon(card);
+			button[i].setEnabled(true);
+		}
+	}
  	
  	public static boolean test(int a){
 		if (a % 2 == 0){

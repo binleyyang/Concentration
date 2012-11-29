@@ -11,7 +11,7 @@ public class ConcentrationTest {
 	
 	frame.pack();
 	frame.setVisible(true);
-	frame.setSize(800, 800);
+	frame.setSize(800, 700);
 	
 	}
 }
