@@ -234,6 +234,7 @@ public class Concentration extends JPanel implements ActionListener {
 							move.setText("Turn: Computer");
 					
 						Click();
+						comparison();
 				}
 			}
 		}
@@ -273,8 +274,8 @@ public class Concentration extends JPanel implements ActionListener {
 				}
 			}
 		}
-		}
 	}
+}
  	
 	public void Click() {
  	
@@ -318,6 +319,7 @@ public class Concentration extends JPanel implements ActionListener {
 		counter = 0;
 		pairs.clear();
 		pairs2.clear();
+		pairCount++;
 	}
  
  	public void replay() { //method to restart the game
