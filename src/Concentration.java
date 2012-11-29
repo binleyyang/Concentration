@@ -117,7 +117,7 @@ public class Concentration extends JPanel implements ActionListener {
 			else {
 				game = 0;
 				replay();
-				//Click(); //have computer click buttons randomly automatical
+				//Click(); //have computer click buttons randomly automatically
 				}
 			}
 			public void itemStateChanged(ItemEvent e) {}
@@ -154,15 +154,6 @@ public class Concentration extends JPanel implements ActionListener {
 	
  	@Override
 	public void actionPerformed(ActionEvent e) {
- 		
-		Timer timer = new Timer(1500, new ActionListener() {
-			@Override
-			public void actionPerformed (ActionEvent e) {
-				for (int i = 0; i < button.length; i++) {
-					button[i].setIcon(card);
-				}
-			}
-		});
 		
 		if (game == 2) { //two players
 			
@@ -185,26 +176,12 @@ public class Concentration extends JPanel implements ActionListener {
 					if (b1 == button[i])
 						System.out.println(true);
 					
-					if (counter == 2) {
-						pairs2.get(0).addActionListener(this);
-						pairs2.get(1).addActionListener(this);
-						timer.start();
-						timer.setRepeats(false);
-						if (test(pairCount) == false)
-							move.setText("Turn: Player 1");
-						else 
-							move.setText("Turn: Player 2");
-						
-						pairCount++;
 						comparison();
-					}
 				}
 			}
 		}
 		
 		if (game == 1) { //one player vs. AI
-			
-			Random random = new Random();
 			
 			int a = 0;
 			
@@ -225,22 +202,7 @@ public class Concentration extends JPanel implements ActionListener {
 					if (b1 == button[i])
 						System.out.println(true);
 					
-					if (counter == 2) {
-						pairs2.get(0).addActionListener(this);
-						pairs2.get(1).addActionListener(this);
-						timer.start();
-						timer.setRepeats(false);
-						if (test(pairCount) == false)
-							move.setText("Turn: Player 1");
-						else {
-							move.setText("Turn: Computer");
-							Click();
-						}
-						
-						pairCount++;
-						
 						comparison();
-					}
 				}
 			}
 		}
@@ -264,19 +226,7 @@ public class Concentration extends JPanel implements ActionListener {
 					if (b1 == button[i])
 						System.out.println(true);
 					
-					if (counter == 2) {
-						pairs2.get(0).addActionListener(this);
-						pairs2.get(1).addActionListener(this);
-						timer.start();
-						timer.setRepeats(false);
-						if (test(pairCount) == false)
-							move.setText("Turn: Player 1");
-						else 
-							move.setText("Turn: Player 2");
-						
-						pairCount++;
 						comparison();
-					}
 				}
 			}
 		}
@@ -307,6 +257,27 @@ public class Concentration extends JPanel implements ActionListener {
  }
 	
 	public void comparison() {
+		Timer timer = new Timer(1500, new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				for (int i = 0; i < button.length; i++) {
+					button[i].setIcon(card);
+				}
+			}
+		});
+		
+		if (counter == 2) {
+			pairs2.get(0).addActionListener(this);
+			pairs2.get(1).addActionListener(this);
+			timer.start();
+			timer.setRepeats(false);
+			if (test(pairCount) == false)
+				move.setText("Turn: Player 1");
+			else 
+				move.setText("Turn: Player 2");
+			
+			pairCount++;
+			
 		if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
 			log.setText("You got a match!");
 			button[pairs.get(0)].setEnabled(false);
@@ -325,6 +296,7 @@ public class Concentration extends JPanel implements ActionListener {
 		counter = 0;
 		pairs.clear();
 		pairs2.clear();
+		}
 	}
  
  	public void replay() { //method to restart the game
@@ -367,6 +339,3 @@ public class Concentration extends JPanel implements ActionListener {
 		return false;
 	}
 }
-
-	
-	
