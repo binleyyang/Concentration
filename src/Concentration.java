@@ -154,6 +154,15 @@ public class Concentration extends JPanel implements ActionListener {
 	
  	@Override
 	public void actionPerformed(ActionEvent e) {
+ 		
+ 		Timer timer = new Timer(1500, new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				for (int i = 0; i < button.length; i++) {
+					button[i].setIcon(card);
+				}
+			}
+		});
 		
 		if (game == 2) { //two players
 			
@@ -176,10 +185,22 @@ public class Concentration extends JPanel implements ActionListener {
 					if (b1 == button[i])
 						System.out.println(true);
 					
+					if (counter == 2) {
+						pairs2.get(0).addActionListener(this);
+						pairs2.get(1).addActionListener(this);
+						timer.start();
+						timer.setRepeats(false);
+						if (test(pairCount) == false)
+							move.setText("Turn: Player 1");
+						else 
+							move.setText("Turn: Player 2");
+						
+						pairCount++;
 						comparison();
 				}
 			}
 		}
+	}
 		
 		if (game == 1) { //one player vs. AI
 			
@@ -202,10 +223,21 @@ public class Concentration extends JPanel implements ActionListener {
 					if (b1 == button[i])
 						System.out.println(true);
 					
-						comparison();
+					if (counter == 2) {
+						pairs2.get(0).addActionListener(this);
+						pairs2.get(1).addActionListener(this);
+						timer.start();
+						timer.setRepeats(false);
+						if (test(pairCount) == false)
+							move.setText("Turn: Player 1");
+						else 
+							move.setText("Turn: Computer");
+					
+						Click();
 				}
 			}
 		}
+	}
 		
 		if (game == 0) { //AI solves the game
 			int a = 0;
@@ -226,9 +258,21 @@ public class Concentration extends JPanel implements ActionListener {
 					if (b1 == button[i])
 						System.out.println(true);
 					
+					if (counter == 2) {
+						pairs2.get(0).addActionListener(this);
+						pairs2.get(1).addActionListener(this);
+						timer.start();
+						timer.setRepeats(false);
+						if (test(pairCount) == false)
+							move.setText("Turn: Player 1");
+						else 
+							move.setText("Turn: Player 2");
+						
+						pairCount++;
 						comparison();
 				}
 			}
+		}
 		}
 	}
  	
@@ -250,34 +294,12 @@ public class Concentration extends JPanel implements ActionListener {
 		pairs2.get(0).addActionListener(this); 
 		pairs2.get(1).addActionListener(this);
 		
-		//timer.start();
-		
 		comparison();
 		pairCount++;
  }
 	
 	public void comparison() {
-		Timer timer = new Timer(1500, new ActionListener() {
-			@Override
-			public void actionPerformed (ActionEvent e) {
-				for (int i = 0; i < button.length; i++) {
-					button[i].setIcon(card);
-				}
-			}
-		});
 		
-		if (counter == 2) {
-			pairs2.get(0).addActionListener(this);
-			pairs2.get(1).addActionListener(this);
-			timer.start();
-			timer.setRepeats(false);
-			if (test(pairCount) == false)
-				move.setText("Turn: Player 1");
-			else 
-				move.setText("Turn: Player 2");
-			
-			pairCount++;
-			
 		if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
 			log.setText("You got a match!");
 			button[pairs.get(0)].setEnabled(false);
@@ -288,7 +310,7 @@ public class Concentration extends JPanel implements ActionListener {
 				player1.setText("Player 1: " + score1);
 			} else if (test(pairCount) == true) {
 				score2++;
-				player2.setText("Computer: " + score2);
+				player2.setText("Player 2: " + score2);
 			}
 		} else 
 			log.setText("Wrong! Try again!");
@@ -296,7 +318,6 @@ public class Concentration extends JPanel implements ActionListener {
 		counter = 0;
 		pairs.clear();
 		pairs2.clear();
-		}
 	}
  
  	public void replay() { //method to restart the game
@@ -306,9 +327,6 @@ public class Concentration extends JPanel implements ActionListener {
 		log.setText("");
 		numberOfMoves.setText("Attempts: 0");
 		pairCount = 0;
-		counter = 0;
-		score1 = 0;
-		score2 = 0;
 		
 		for (int i = 0; i < button.length; i++) {
 			button[i].setIcon(card);
