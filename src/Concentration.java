@@ -26,7 +26,8 @@ public class Concentration extends JPanel implements ActionListener {
 	ImageIcon card, card2, back, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, card17, card18, card19, card20, card21, card22, card23, card24, card25, card26, card27, card28, card29, card30, card31, card32, card33, card34, card35, card36, card37, card38, card39, card40, card41, card42, card43, card44, card45, card46, card47, card48, card49, card50, card51, card52, card53, card54, card55, card56 ;
 	ImageIcon[] cards = {card2, card3, card4, card5, card6, card7, card8, card9, card10, card11, card12, card13, card14, card15, card16, card17, card18, card19, card20, card21, card22, card23, card24, card25, card26, card27, card28, card29, card30, card31, card32, card33, card34, card35, card36, card37, card38, card39, card40, card41, card42, card43, card44, card45, card46, card47, card48, card49, card50, card51, card52, card53, card54, card55, card56};
 	
-	//private int counter, score1, score2, pairCount;
+	int game = 2;
+	
 	final JLabel player1 = new JLabel("Player 1: 0");
 	final JLabel player2 = new JLabel("Player 2: 0");
 	final JLabel move = new JLabel("Turn: Player 1");
@@ -103,18 +104,19 @@ public class Concentration extends JPanel implements ActionListener {
 	
 	class RadioListener implements ActionListener, ChangeListener, ItemListener {  
 		public void actionPerformed(ActionEvent e) {
-
-			System.out.print("ActionEvent received: ");
+			
 			if (e.getActionCommand() == twoPeople) {
-			System.out.println(twoPeople + " pressed.");
+				game = 2;
+				replay();
 			} else if (e.getActionCommand() == onePerson) {
-			System.out.println(onePerson + " pressed.");
+				game = 1;
+				replay();
 			}
 			else {
-				System.out.println(noPeople + " pressed.");
+				game = 0;
+				replay();
+				}
 			}
-			}
-	
 			public void itemStateChanged(ItemEvent e) {
 			System.out.println("ItemEvent received: " 
 				       + e.getItem()
@@ -164,13 +166,15 @@ public class Concentration extends JPanel implements ActionListener {
 			}
 		});
 		
-		int a = 0;
-		
-		if (e.getSource() == replayBtn) {
-			replay();
-		} 
-		
+		if (game == 2) { //two players
+			
+			int a = 0;
+			
+			if (e.getSource() == replayBtn) 
+				replay();
+			
 			for (int i = 0; i < button.length; i++) {
+				
 				if (e.getSource() == button[i]) {	
 					a = i;
 					button[a].setIcon(cards[a]);
@@ -202,10 +206,10 @@ public class Concentration extends JPanel implements ActionListener {
 						
 							if (test(pairCount) == false) {
 								score1++;
-								player1.setText("Player 1 score: " + score1);
+								player1.setText("Player 1: " + score1);
 							} else if (test(pairCount) == true) {
 								score2++;
-								player2.setText("Player 2 score: " + score2);
+								player2.setText("Player 2: " + score2);
 							}
 						} else 
 							log.setText("Wrong! Try again!");
@@ -219,8 +223,67 @@ public class Concentration extends JPanel implements ActionListener {
 				}
 			}
 		}
+		
+		if (game == 1) { //one player vs. AI
+			
+			int a = 0;
+			
+			if (e.getSource() == replayBtn)
+				replay();
+		
+			for (int i = 0; i < button.length; i++) {
+				
+				if (e.getSource() == button[i]) {	
+					a = i;
+					button[a].setIcon(cards[a]);
+					button[a].removeActionListener(this);
+					counter++;
+					numberOfMoves.setText("Attempts:" + pairCount);
+					pairs.add(i);
+					pairs2.add(button[a]);
+					
+					if (b1 == button[i])
+						System.out.println(true);
+					
+					if (counter == 2) {
+						pairs2.get(0).addActionListener(this);
+						pairs2.get(1).addActionListener(this);
+						timer.start();
+						timer.setRepeats(false);
+						if (test(pairCount) == false)
+							move.setText("Turn: Player 1");
+						else 
+							move.setText("Turn: Player 2");
+						
+						pairCount++;
+						
+						if (check(Sbutton[shuffled[pairs.get(0)]-1], Sbutton[shuffled[pairs.get(1)]-1]) == true) {
+							log.setText("You got a match!");
+							button[pairs.get(0)].setEnabled(false);
+							button[pairs.get(1)].setEnabled(false);
+						
+							if (test(pairCount) == false) {
+								score1++;
+								player1.setText("Player 1: " + score1);
+							} else if (test(pairCount) == true) {
+								score2++;
+								player2.setText("Player 2: " + score2);
+							}
+						} else 
+							log.setText("Wrong! Try again!");
+				
+						counter = 0;
+						pairs.clear();
+						pairs2.clear();
+						System.out.println(counter);
+						
+					}
+				}
+			}
+		}
+	}
  
- 	public void replay() {
+ 	public void replay() { //method to restart the game
 		player1.setText("Player 1: 0");
 		player2.setText("Player 2: 0");
 		move.setText("Turn: Player 1");
@@ -237,23 +300,23 @@ public class Concentration extends JPanel implements ActionListener {
 		}
 	}
  	
- 	public static boolean test(int a){
-		if (a % 2 == 0){
+ 	public static boolean test(int a) { //method to test if two cards have been selected or not
+		if (a % 2 == 0) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean check(String x, String y){
+	public static boolean check(String x, String y) { //method to check if the cards are the same value or not
 		int a = 0, b = 0;
 		if (x.equals(y))
 			return false;
-		for (int i = 0; i <=13; i++){
-			for (int j = 0; j<=3; j++){
-				if (compare[i][j].equals(x)){
+		for (int i = 0; i <=13; i++) {
+			for (int j = 0; j<=3; j++) {
+				if (compare[i][j].equals(x)) {
 					a = i;
 				}
-				if (compare[i][j].equals(y)){
+				if (compare[i][j].equals(y)) {
 					b = i;
 				}
 			}
